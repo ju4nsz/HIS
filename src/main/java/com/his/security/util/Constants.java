@@ -26,11 +26,21 @@ public class Constants {
         public static final String INFORMACION_INVALIDA = "¡Lo sentimos! No pudimos validar la información que nos enviaste. Por favor, revisa y vuelve a intentarlo.";
         public static final String USUARIO_EXISTENTE = "¡Lo sentimos! El e-mail que intentas ingresar ya existe. Por favor, revisa y vuelve a intentarlo.";
         public static final String USUARIO_INACTIVO = "¡Lo sentimos! No pudimos encontrar tu información, tal vez tu usuario está desactivado. Por favor, revisa y vuelve a intentarlo.";
+        public static final String TOKEN_INVALIDO = "¡Lo sentimos! Tu sesión se ha expirado. Por favor, revisa y vuelve a intentarlo.";
+        public static final String REFRESH_TOKEN_INVALIDO = "¡Lo sentimos! No es posible utilizar un refresh token como token de acceso.";
+        public static final String LOGOUT_EXITOSO = "¡Excelente! Has cerrado sesión en todos los dispositivos.";
     }
 
     public enum EstadoUsuario {
         ACTIVO,
         INACTIVO
+    }
+
+    public static class Params {
+        public static final Integer ACCESS_TOKEN_DURACION = 3600000;
+        public static final Integer REFRESH_TOKEN_DURACION = 604800000;
+        public static final Integer REFRESH_TOKEN_DIAS = 7;
+
     }
 }
 
