@@ -1,11 +1,14 @@
 package com.his.security.util;
 
+import com.his.security.exception.ApiException;
 import com.his.security.service.CustomUserDetailsService;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,7 +42,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authHeader.substring(7);
 
         // 2️⃣ Validar el token
+
+        if (jwtUtil.isRefreshToken(token))
+            throw new ApiException(Constants.Mensajes.REFRESH_TOKEN_INVALIDO, HttpStatus.UNAUTHORIZED);
+
         String email = jwtUtil.extractEmail(token);
+
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             var userDetails = userDetailsService.loadUserByUsername(email);

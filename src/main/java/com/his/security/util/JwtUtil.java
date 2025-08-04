@@ -1,9 +1,11 @@
 package com.his.security.util;
 
+import com.his.security.config.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -15,16 +17,20 @@ import java.util.Set;
 import java.util.function.Function;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final JwtProperties jwtProperties;
 
-    public String generateToken(String email, String rol, Set<String> permisos) {
-        long expirationMs = 3600000; // 1 hora
+    public String generateToken(String email, String rol, Set<String> permisos, boolean isRefresh) {
+        long expirationMs = isRefresh ? jwtProperties.getRefreshTokenExpiration()
+                : jwtProperties.getAccessTokenExpiration();
         return Jwts.builder()
                 .setSubject(email)
                 .claim("rol", rol)
                 .claim("permisos", permisos)
+                .claim("typ", isRefresh ? "refresh" : "access")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key)
@@ -68,5 +74,10 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
         return claimsResolver.apply(claims);
+    }
+
+    public boolean isRefreshToken(String token) {
+        Claims claims = extractAllClaims(token);
+        return "refresh".equals(claims.get("typ"));
     }
 }
