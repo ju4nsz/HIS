@@ -2,17 +2,17 @@ package com.his.security.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class LogInResponse {
+@NoArgsConstructor
+public class RefreshTokenResponse {
 
+    private String accessToken;
     private String refreshToken;
-    private String accesToken;
     private String tipo = "Bearer";
-    private String email;
-    private String rol;
 
 }

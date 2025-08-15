@@ -31,7 +31,12 @@ public class SecurityConfig {
                 // STATELESS: No guardamos sesión en el servidor.
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // Permitir endpoints de login y register.
+                        .requestMatchers(
+                                "/auth/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/api-docs/**").permitAll() // Permitir endpoints de login y register.
                         .anyRequest().authenticated()
                 )
                 // Registramos nuestro filtro JWT antes de la autenticación

@@ -7,6 +7,15 @@ server:
   servlet:
     context-path: /api-ms-security
 
-logging:
-  level:
-    org.springframework.security: DEBUG
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    display-request-duration: true
+
+info:
+  app:
+    name: HIS - Microservicio de Seguridad
+    description: API para autenticación, autorización y gestión de tokens
+    version: 1.0.0

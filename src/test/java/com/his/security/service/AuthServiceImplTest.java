@@ -96,7 +96,7 @@ class AuthServiceImplTest {
         var response = authService.login(new LogInRequest(email, password));
 
         // Assert
-        assertNotNull(response.getToken());
+        assertNotNull(response.getAccesToken());
         assertEquals(email, response.getEmail());
     }
 
