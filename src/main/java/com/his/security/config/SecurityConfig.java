@@ -36,7 +36,8 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
-                                "/api-docs/**").permitAll() // Permitir endpoints de login y register.
+                                "/api-docs/**",
+                                "/actuator/**").permitAll() // Permitir endpoints de login y register.
                         .anyRequest().authenticated()
                 )
                 // Registramos nuestro filtro JWT antes de la autenticación
