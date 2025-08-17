@@ -40,8 +40,10 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void registerUser(RegisterRequest request) {
 
-        if (usuarioRepository.existsByEmail(request.getEmail()))
+        if (usuarioRepository.existsByEmail(request.getEmail())){
+            log.info("Email existente: {}", request.getEmail());
             throw new ApiException(Constants.Mensajes.USUARIO_EXISTENTE, HttpStatus.CONFLICT);
+        }
 
         Rol rol = rolRepository.findByNombreRol(Constants.Roles.RECEPCIONISTA)
                 .orElseThrow(() -> new ApiException("Rol por defecto no encontrado", HttpStatus.INTERNAL_SERVER_ERROR));
@@ -83,6 +85,7 @@ public class AuthServiceImpl implements AuthService {
                 usuario.getEmail(), usuario.getRol().getNombreRol());
     }
 
+    @Transactional
     @Override
     public RefreshTokenResponse refresh(String refreshToken) {
 

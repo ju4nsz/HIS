@@ -37,10 +37,7 @@ public class Constants {
     }
 
     public static class Params {
-        public static final Integer ACCESS_TOKEN_DURACION = 3600000;
-        public static final Integer REFRESH_TOKEN_DURACION = 604800000;
         public static final Integer REFRESH_TOKEN_DIAS = 7;
-
     }
 }
 

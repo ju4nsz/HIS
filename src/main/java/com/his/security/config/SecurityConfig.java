@@ -10,7 +10,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,17 +26,19 @@ public class SecurityConfig {
     @Bean // Reemplaza la antigua WebSecurityConfigurerAdapter.
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Desactivar CSRF en APIs REST
+                .csrf(csrf -> csrf.disable())
                 // STATELESS: No guardamos sesión en el servidor.
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/auth/**",
+                                "/auth/login",
+                                "/auth/register",
+                                "/auth/refresh",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
                                 "/api-docs/**",
-                                "/actuator/**").permitAll() // Permitir endpoints de login y register.
+                                "/actuator/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // Registramos nuestro filtro JWT antes de la autenticación

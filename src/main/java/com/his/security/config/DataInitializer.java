@@ -33,10 +33,9 @@ public class DataInitializer {
     public CommandLineRunner initData() {
         return args -> {
 
-            // 1️⃣ Crear permisos iniciales si no existen
             List<String> permisosIniciales = List.of(
                     PACIENTE_VER, PACIENTE_CREAR, PACIENTE_EDITAR,
-                    CITA_EDITAR, CITA_CREAR, CITA_EDITAR
+                    CITA_EDITAR, CITA_CREAR, CITA_EDITAR, CITA_VER
             );
 
             for (String nombre : permisosIniciales) {
@@ -56,7 +55,6 @@ public class DataInitializer {
             Rol medico = rolRepository.findByNombreRol(MEDICO).orElseGet(() -> rolRepository.save(
                     Rol.builder().nombreRol(MEDICO).descripcion(MEDICO).build()
             ));
-
             Rol recepcionista = rolRepository.findByNombreRol(RECEPCIONISTA).orElseGet(() -> rolRepository.save(
                     Rol.builder().nombreRol(RECEPCIONISTA).descripcion(RECEPCIONISTA).build()
             ));
@@ -65,41 +63,18 @@ public class DataInitializer {
             admin.setPermisos(todosPermisos);
             rolRepository.save(admin);
 
-            Set<Permiso> permisosMedico = Set.copyOf(
-                    permisoRepository.findAll().stream()
-                            .filter(p -> p.getNombre().startsWith("paciente") || p.getNombre().startsWith("cita"))
-                            .toList()
-            );
-            medico.setPermisos(permisosMedico);
-            rolRepository.save(medico);
-
-            String emailAdmin = "ju4nsz-admin@his.com";
-            String emailMedico = "ju4nsz-medico@his.com";
+            String emailAdmin = "ju4nsz@his.com";
             if (!usuarioRepository.existsByEmail(emailAdmin)) {
                 Usuario adminUser = Usuario.builder()
-                        .nombreCompleto("Administrador Principal")
+                        .nombreCompleto("Juan Camilo")
                         .email(emailAdmin)
-                        .passwordHash(passwordEncoder.encode("admin123"))
+                        .passwordHash(passwordEncoder.encode("1234"))
                         .estado(ACTIVO)
                         .fechaCreacion(LocalDateTime.now())
                         .rol(admin)
                         .build();
 
                 usuarioRepository.save(adminUser);
-                System.out.println("✅ Usuario ADMIN creado: " + emailAdmin + " / admin123");
-            }
-            if (!usuarioRepository.existsByEmail(emailMedico)) {
-                Usuario adminUser = Usuario.builder()
-                        .nombreCompleto("Médico de prueba")
-                        .email(emailMedico)
-                        .passwordHash(passwordEncoder.encode("medico123"))
-                        .estado(ACTIVO)
-                        .fechaCreacion(LocalDateTime.now())
-                        .rol(medico)
-                        .build();
-
-                usuarioRepository.save(adminUser);
-                System.out.println("✅ Usuario MEDICO creado: " + emailMedico + " / admin123");
             }
         };
     }

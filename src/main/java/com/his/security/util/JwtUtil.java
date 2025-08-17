@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtUtil {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final SecretKey key;
     private final JwtProperties jwtProperties;
 
     public String generateToken(String email, String rol, Set<String> permisos, boolean isRefresh) {

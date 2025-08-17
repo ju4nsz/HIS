@@ -46,7 +46,7 @@ public class AuthController {
             description = "Recibe el refresh token y envía un nuevo token de acceso y otro refresh token.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    @PostMapping("/refresh/{refreshToken}")
+    @PostMapping("/refresh")
     public ResponseEntity<ApiResponse<RefreshTokenResponse>> refresh(@Valid @RequestBody RefreshTokenRequest request) {
         RefreshTokenResponse response = authService.refresh(request.getRefreshToken());
         return ResponseEntity.ok(new ApiResponse<>(true, Constants.Mensajes.LOGIN_EXITOSO, response));
