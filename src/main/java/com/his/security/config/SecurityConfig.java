@@ -1,6 +1,7 @@
 package com.his.security.config;
 
 import com.his.security.service.CustomUserDetailsService;
+import com.his.security.util.InternalOnlyFilter;
 import com.his.security.util.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthFilter;
     private final CustomUserDetailsService userDetailsService;
+    private final InternalOnlyFilter internalOnlyFilter;
+    private final JwtAuthenticationFilter jwtAuthFilter;
     private final PasswordEncoder passwordEncoder;
 
     @Bean // Reemplaza la antigua WebSecurityConfigurerAdapter.
@@ -43,6 +45,7 @@ public class SecurityConfig {
                 )
                 // Registramos nuestro filtro JWT antes de la autenticación
                 .authenticationProvider(authenticationProvider())
+                .addFilterBefore(internalOnlyFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
